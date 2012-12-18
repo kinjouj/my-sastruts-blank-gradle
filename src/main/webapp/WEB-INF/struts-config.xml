@@ -1,0 +1,31 @@
+<?xml version="1.0" ?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.2//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_2.dtd">
+<struts-config>
+    <form-beans>
+    </form-beans>
+    <global-exceptions>
+        <exception
+            path="/WEB-INF/views/error/norole.jsp"
+            key="errors.norole"
+            type="org.seasar.struts.exception.NoRoleRuntimeException" />
+    </global-exceptions>
+
+    <global-forwards></global-forwards>
+
+    <action-mappings></action-mappings>
+
+    <controller
+        maxFileSize="1024K"
+        bufferSize="1024"
+        processorClass="org.seasar.struts.action.S2RequestProcessor"
+        multipartClass="org.seasar.struts.upload.S2MultipartRequestHandler" />
+
+
+    <message-resources
+        parameter="application"
+        factory="org.seasar.struts.util.S2PropertyMessageResourcesFactory" />
+
+    <plug-in className="org.seasar.struts.validator.S2ValidatorPlugIn">
+        <set-property property="pathnames" value="/WEB-INF/validator-rules.xml" />
+    </plug-in>
+</struts-config>

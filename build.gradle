@@ -1,0 +1,37 @@
+apply {
+    plugin "war"
+    plugin "jetty"
+}
+
+repositories {
+    mavenCentral()
+    maven {
+        url "http://maven.seasar.org/maven2"
+    }
+}
+
+dependencies {
+    compile 'org.seasar.sastruts:sa-struts:1.0.4-sp9'
+    compile 'org.apache.geronimo.specs:geronimo-ejb_3.0_spec:1.0'
+    compile 'org.apache.geronimo.specs:geronimo-jta_1.1_spec:1.0'
+    compile "org.apache.geronimo.specs:geronimo-jpa_3.0_spec:1.0"
+    compile "mysql:mysql-connector-java:5.1.21"
+}
+
+buildDir = "target"
+
+sourceSets {
+    main {
+        output.classesDir = "${buildDir}/classes"
+        output.resourcesDir = "${buildDir}/classes"
+    }
+
+    test {
+        output.classesDir = "${buildDir}/test-classes"
+        output.resourcesDir = "${buildDir}/test-classes"
+    }
+}
+
+[jettyRun, jettyRunWar]*.configure {
+    contextPath = ''
+}

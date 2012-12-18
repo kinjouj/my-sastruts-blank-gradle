@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE components PUBLIC "-//SEASAR//DTD S2Container 2.4//EN"
+  "http://www.seasar.org/dtd/components24.dtd">
+<components namespace="s2junit4">
+  <component name="context" class="org.seasar.framework.unit.impl.InternalTestContextImpl">
+    <!-- これをやるとテストデータがそっくりそのまま入れ替わる -->
+    <!-- 詳しくはhttp://s2container.seasar.org/2.4/ja/S2JUnit4.html#tipsAllReplace -->
+    <property name="preparationType">@org.seasar.framework.unit.PreparationType@ALL_REPLACE</property> 
+  </component>
+  <component class="org.seasar.framework.unit.impl.DataAccessorImpl"/>
+  <component class="org.seasar.framework.unit.impl.ConfigFileIncluderImpl">
+    <initMethod name="addConfigFile">
+      <arg>"app.dicon"</arg>
+    </initMethod>
+    <initMethod name="addConfigFile">
+      <arg>context.testClassShortName + ".dicon"</arg>
+    </initMethod>
+  </component>
+  <component class="org.seasar.framework.unit.impl.TestDataPreparerImpl">
+    <initMethod name="addTestDataXlsPath">
+      <arg>context.testClassShortName + "_" + context.testMethodName + ".xls"</arg>
+    </initMethod>
+    <initMethod name="addTestDataXlsPath">
+      <arg>context.testClassShortName + ".xls"</arg>
+    </initMethod>
+  </component>
+</components>
