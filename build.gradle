@@ -1,6 +1,7 @@
 apply {
     plugin "war"
     plugin "jetty"
+    plugin "eclipse"
 }
 
 repositories {
@@ -18,7 +19,17 @@ dependencies {
     compile "mysql:mysql-connector-java:5.1.21"
 }
 
-buildDir = "target"
+targetDir = "target"
+buildDir = targetDir
+
+
+eclipse.classpath.file {
+    whenMerged { classpath ->
+        classpath.entries.findAll { entry ->
+            entry.kind == "output"
+        }*.path = "/${project.name}/${targetDir}/classes"
+    }
+}
 
 sourceSets {
     main {
@@ -34,4 +45,10 @@ sourceSets {
 
 [jettyRun, jettyRunWar]*.configure {
     contextPath = ''
+}
+
+test.jvmArgs '-XX:-UseSplitVerifier'
+
+test.dependsOn {
+    apply from: "cobertura.gradle"
 }

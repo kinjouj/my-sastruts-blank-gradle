@@ -1,0 +1,60 @@
+configurations{
+    cobertura
+}
+
+dependencies {
+    cobertura "net.sourceforge.cobertura:cobertura:1.9.4.1"
+}
+
+def coberturaReportDir = new File("${buildDir}/reports", "cobertura")
+def coberturaTmpDir = new File(new File(buildDir, "tmp"), "cobertura")
+def coberturaInstrDir = new File(coberturaTmpDir, "instr")
+def coberturaMetaDataFile = new File(coberturaTmpDir, "cobertura.ser")
+
+test {
+
+    jvmArgs "-Dnet.sourceforge.cobertura.datafile=${coberturaMetaDataFile}"
+
+    doFirst {
+
+        ant {
+            taskdef(
+                resource: 'tasks.properties',
+                classpath: configurations.cobertura.asPath
+            )
+
+            'cobertura-instrument'(
+                todir: coberturaInstrDir,
+                datafile: coberturaMetaDataFile
+            ) {
+                fileset(dir: sourceSets.main.output.classesDir)
+            }
+        }
+
+        classpath = files("${coberturaInstrDir}") + configurations.cobertura + classpath
+    }
+
+    doLast {
+        ant {
+            'cobertura-report'(
+                destdir: coberturaReportDir,
+                datafile:coberturaMetaDataFile,
+                format:'xml'
+            ) {
+                sourceSets.main.allJava.srcDirs.each {
+                    fileset(dir: it)
+                }
+            }
+
+            'cobertura-report'(
+                destdir: coberturaReportDir,
+                datafile:coberturaMetaDataFile,
+                format:'html'
+            ) {
+                sourceSets.main.allJava.srcDirs.each {
+                    fileset(dir: it)
+                }
+            }
+        }
+    }
+}
