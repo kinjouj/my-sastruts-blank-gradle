@@ -19,15 +19,15 @@ dependencies {
     compile "mysql:mysql-connector-java:5.1.21"
 }
 
-targetDir = "target"
-buildDir = targetDir
+ext.targetDir = "target"
+buildDir = ext.targetDir
 
 
 eclipse.classpath.file {
     whenMerged { classpath ->
         classpath.entries.findAll { entry ->
             entry.kind == "output"
-        }*.path = "/${project.name}/${targetDir}/classes"
+        }*.path = "/${project.name}/${ext.targetDir}/classes"
     }
 }
 

@@ -26,4 +26,26 @@ sourceSets {
 }
 
 ant.classpath = runtimeClasspath.asPath + ":" + configurations.runtime.asPath
-ant.importBuild "s2jdbc-gen-build.xml"
+ant.taskdef(resource: "s2jdbc-gen-task.properties", classpath: ant.classpath)
+//ant.importBuild "s2jdbc-gen-build.xml"
+
+task "gen-ddl"(dependsOn: "compileJava") << {
+    ant."gen-ddl"(
+        classpath: ant.classpath,
+        classpathDir: "${buildDir}/classes",
+        rootpackagename: "sample",
+        dump: true
+    )
+}
+
+task "gen-entity" << {
+    ant."gen-entity"(classpath: ant.classpath, rootpackagename: "sample")
+}
+
+task migrate(dependsOn: "gen-ddl") << {
+    ant.migrate(
+        classpath: ant.classpath,
+        classpathDir: "${buildDir}/classes",
+        rootpackagename: "sample"
+    )
+}

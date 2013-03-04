@@ -7,8 +7,8 @@
     <component name="xaDataSource" class="org.seasar.extension.dbcp.impl.XADataSourceImpl">
         <property name="driverClassName">"com.mysql.jdbc.Driver"</property>
         <property name="URL">"jdbc:mysql://localhost:3306/sample"</property>
-        <property name="user">"user"</property>
-        <property name="password">"pass"</property>
+        <property name="user">""</property>
+        <property name="password">""</property>
     </component>
 
     <component name="connectionPool" class="org.seasar.extension.dbcp.impl.ConnectionPoolImpl">
