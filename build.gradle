@@ -12,22 +12,27 @@ repositories {
 }
 
 dependencies {
-    compile 'org.seasar.sastruts:sa-struts:1.0.4-sp9'
-    compile 'org.apache.geronimo.specs:geronimo-ejb_3.0_spec:1.0'
-    compile 'org.apache.geronimo.specs:geronimo-jta_1.1_spec:1.0'
+    compile "org.seasar.sastruts:sa-struts:1.0.4-sp9"
+    compile "org.apache.geronimo.specs:geronimo-ejb_3.0_spec:1.0"
+    compile "org.apache.geronimo.specs:geronimo-jta_1.1_spec:1.0"
     compile "org.apache.geronimo.specs:geronimo-jpa_3.0_spec:1.0"
     compile "mysql:mysql-connector-java:5.1.21"
+
+    runtime "org.seasar.container:s2jdbc-gen:2.4.46"
 }
 
-ext.targetDir = "target"
-buildDir = ext.targetDir
+ext {
+    targetDir = "target"
+    s2jdbc_package = "sample"
+}
 
+buildDir = targetDir
 
 eclipse.classpath.file {
     whenMerged { classpath ->
         classpath.entries.findAll { entry ->
             entry.kind == "output"
-        }*.path = "/${project.name}/${ext.targetDir}/classes"
+        }*.path = "/${project.name}/${targetDir}/classes"
     }
 }
 
@@ -44,11 +49,38 @@ sourceSets {
 }
 
 [jettyRun, jettyRunWar]*.configure {
-    contextPath = ''
+    contextPath = ""
 }
 
-test.jvmArgs '-XX:-UseSplitVerifier'
+test.jvmArgs "-XX:-UseSplitVerifier"
 
 test.dependsOn {
     apply from: "cobertura.gradle"
+}
+
+ant.classpath = runtimeClasspath.asPath + ":" + configurations.runtime.asPath
+ant.taskdef(resource: "s2jdbc-gen-task.properties", classpath: ant.classpath)
+
+task "s2jdbc-gen-ddl" << {
+    ant."gen-ddl"(
+        classpath: ant.classpath,
+        classpathDir: "${buildDir}/classes",
+        rootpackagename: s2jdbc_package,
+        dump: true
+    )
+}
+
+task "s2jdbc-gen-entity" << {
+    ant."gen-entity"(
+        classpath: ant.classpath,
+        rootpackagename: s2jdbc_package
+    )
+}
+
+task "s2jdbc-migrate" << {
+    ant.migrate(
+        classpath: ant.classpath,
+        classpathDir: "${buildDir}/classes",
+        rootpackagename: s2jdbc_package
+    )
 }

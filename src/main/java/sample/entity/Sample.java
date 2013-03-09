@@ -14,7 +14,7 @@ import javax.persistence.Id;
  * 
  */
 @Entity
-@Generated(value = {"S2JDBC-Gen 2.4.46", "org.seasar.extension.jdbc.gen.internal.model.EntityModelFactoryImpl"}, date = "2013/03/04 16:19:08")
+@Generated(value = {"S2JDBC-Gen 2.4.46", "org.seasar.extension.jdbc.gen.internal.model.EntityModelFactoryImpl"}, date = "2013/03/09 22:47:05")
 public class Sample implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -25,11 +25,11 @@ public class Sample implements Serializable {
     @Column(precision = 10, nullable = false, unique = true)
     public Integer id;
 
-    /** createdAtプロパティ */
-    @Column(nullable = false, unique = false)
-    public Date createdAt;
-
     /** dataプロパティ */
     @Column(length = 255, nullable = false, unique = false)
     public String data;
+
+    /** createdAtプロパティ */
+    @Column(nullable = false, unique = false)
+    public Date createdAt;
 }

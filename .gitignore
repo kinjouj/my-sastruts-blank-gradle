@@ -1,2 +1,6 @@
 target
+db
 .gradle
+.classpath
+.project
+.settings
